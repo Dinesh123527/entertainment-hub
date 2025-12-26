@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import HeroBanner from "../../components/HeroBanner/HeroBanner";
 import CustomPagination from "../../components/Pagination/CustomPagination";
 import SingleContent from "../../components/SingleContent/SingleContent";
 import { SkeletonGrid } from "../../components/SkeletonCard/SkeletonCard";
@@ -40,8 +41,14 @@ const Trending = () => {
   }, [page]);
 
   return (
-    <div>
-      <span className="pageTitle">Trending</span>
+    <div className="trending-page">
+      {/* Hero Banner - show only on first page */}
+      {page === 1 && content.length > 0 && !loading && (
+        <HeroBanner content={content} />
+      )}
+
+      <span className="pageTitle">Trending Today</span>
+
       {loading ? (
         <SkeletonGrid count={20} />
       ) : (
