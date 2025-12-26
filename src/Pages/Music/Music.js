@@ -9,7 +9,7 @@ import { SkeletonGrid } from "../../components/SkeletonCard/SkeletonCard";
 import SongCard from "../../components/SongCard/SongCard";
 import "./Music.css";
 
-const SAAVN_API = "https://saavn.me/api";
+const SAAVN_API = "https://www.jiosaavn.com";
 
 const LANGUAGES = [
     { code: "telugu", label: "Telugu" },
@@ -34,6 +34,27 @@ const Music = () => {
         fetchTrendingSongs();
     }, [selectedLanguage]);
 
+    // Transform JioSaavn API response to our format
+    const transformSong = (song) => ({
+        id: song.id,
+        name: song.title || song.song,
+        duration: song.more_info?.duration || song.duration,
+        image: [
+            { url: song.image?.replace("150x150", "50x50") },
+            { url: song.image?.replace("150x150", "150x150") },
+            { url: song.image?.replace("150x150", "500x500") },
+        ],
+        artists: {
+            primary: song.more_info?.artistMap?.primary_artists ||
+                (song.primary_artists ? [{ name: song.primary_artists }] : [{ name: "Unknown" }]),
+        },
+        downloadUrl: song.more_info?.encrypted_media_url ?
+            [{ url: `https://www.jiosaavn.com/api.php?__call=song.generateAuthToken&url=${encodeURIComponent(song.more_info.encrypted_media_url)}&bitrate=320&api_version=4&_format=json&ctx=web6dot0` }] :
+            null,
+        language: song.language,
+        playCount: song.play_count,
+    });
+
     const fetchTrendingSongs = async () => {
         setLoading(true);
         const startTime = Date.now();
@@ -42,11 +63,11 @@ const Music = () => {
         try {
             // Search for popular songs in selected language
             const { data } = await axios.get(
-                `${SAAVN_API}/search/songs?query=top ${selectedLanguage} songs&limit=20`
+                `${SAAVN_API}?__call=search.getResults&_format=json&_marker=0&api_version=4&ctx=web6dot0&n=20&q=top+${selectedLanguage}+songs`
             );
 
-            if (data.success && data.data?.results) {
-                setTrendingSongs(data.data.results);
+            if (data.results) {
+                setTrendingSongs(data.results.map(transformSong));
             }
         } catch (error) {
             console.error("Error fetching trending songs:", error);
@@ -71,11 +92,11 @@ const Music = () => {
 
         try {
             const { data } = await axios.get(
-                `${SAAVN_API}/search/songs?query=${encodeURIComponent(searchText)}&limit=30`
+                `${SAAVN_API}?__call=search.getResults&_format=json&_marker=0&api_version=4&ctx=web6dot0&n=30&q=${encodeURIComponent(searchText)}`
             );
 
-            if (data.success && data.data?.results) {
-                setSongs(data.data.results);
+            if (data.results) {
+                setSongs(data.results.map(transformSong));
             } else {
                 setSongs([]);
             }

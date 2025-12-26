@@ -1,6 +1,9 @@
+import axios from "axios";
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 
 const MusicContext = createContext();
+
+const SAAVN_API = "https://www.jiosaavn.com/api.php";
 
 export const MusicProvider = ({ children }) => {
     const [currentSong, setCurrentSong] = useState(null);
@@ -10,34 +13,61 @@ export const MusicProvider = ({ children }) => {
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
+    const [audioUrl, setAudioUrl] = useState(null);
     const audioRef = useRef(new Audio());
 
+    // Fetch the actual audio URL when song changes
     useEffect(() => {
-        if (currentSong && currentSong.downloadUrl) {
+        const fetchAudioUrl = async () => {
+            if (!currentSong?.downloadUrl?.[0]?.url) return;
+
             setIsLoading(true);
-            const urls = currentSong.downloadUrl;
-            const highestQuality = urls[urls.length - 1]?.url || urls[0]?.url;
-            audioRef.current.src = highestQuality;
+            try {
+                // The downloadUrl contains the API call to get the actual audio URL
+                const tokenUrl = currentSong.downloadUrl[0].url;
+                const { data } = await axios.get(tokenUrl);
+
+                if (data.auth_url) {
+                    setAudioUrl(data.auth_url);
+                }
+            } catch (error) {
+                console.error("Error fetching audio URL:", error);
+                // Fallback: try to use JioTune preview if available
+                if (currentSong.previewUrl) {
+                    setAudioUrl(currentSong.previewUrl);
+                }
+            }
+        };
+
+        if (currentSong) {
+            fetchAudioUrl();
+        }
+    }, [currentSong]);
+
+    // Play audio when URL is ready
+    useEffect(() => {
+        if (audioUrl) {
+            audioRef.current.src = audioUrl;
             audioRef.current.load();
 
             if (isPlaying) {
                 audioRef.current.play().catch(console.error);
             }
         }
-    }, [currentSong]);
+    }, [audioUrl]);
 
     useEffect(() => {
-        if (isPlaying && currentSong) {
+        if (isPlaying && audioUrl) {
             audioRef.current.play().catch(console.error);
         } else {
             audioRef.current.pause();
         }
-    }, [isPlaying, currentSong]);
+    }, [isPlaying, audioUrl]);
 
     useEffect(() => {
         audioRef.current.volume = volume;
     }, [volume]);
-    
+
     useEffect(() => {
         const audio = audioRef.current;
 
@@ -58,21 +88,29 @@ export const MusicProvider = ({ children }) => {
             setIsLoading(false);
         };
 
+        const handleError = (e) => {
+            console.error("Audio error:", e);
+            setIsLoading(false);
+        };
+
         audio.addEventListener("timeupdate", handleTimeUpdate);
         audio.addEventListener("loadedmetadata", handleLoadedMetadata);
         audio.addEventListener("ended", handleEnded);
         audio.addEventListener("canplay", handleCanPlay);
+        audio.addEventListener("error", handleError);
 
         return () => {
             audio.removeEventListener("timeupdate", handleTimeUpdate);
             audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
             audio.removeEventListener("ended", handleEnded);
             audio.removeEventListener("canplay", handleCanPlay);
+            audio.removeEventListener("error", handleError);
         };
     }, [queue]);
 
     const playSong = (song, songQueue = []) => {
         setCurrentSong(song);
+        setAudioUrl(null); // Reset audio URL
         if (songQueue.length > 0) {
             setQueue(songQueue);
         }
@@ -91,6 +129,7 @@ export const MusicProvider = ({ children }) => {
         const currentIndex = queue.findIndex(s => s.id === currentSong?.id);
         const nextIndex = (currentIndex + 1) % queue.length;
         setCurrentSong(queue[nextIndex]);
+        setAudioUrl(null);
         setIsPlaying(true);
     };
 
@@ -100,6 +139,7 @@ export const MusicProvider = ({ children }) => {
         const currentIndex = queue.findIndex(s => s.id === currentSong?.id);
         const prevIndex = currentIndex <= 0 ? queue.length - 1 : currentIndex - 1;
         setCurrentSong(queue[prevIndex]);
+        setAudioUrl(null);
         setIsPlaying(true);
     };
 
