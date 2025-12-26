@@ -1,70 +1,179 @@
-# Getting Started with Create React App
+# 🎬 Story Flix
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A modern, feature-rich entertainment discovery platform built with React. Browse trending content, discover movies & TV series, search with advanced filters, and manage your personal watchlist.
 
-## Available Scripts
+![React](https://img.shields.io/badge/React-17.0.2-61DAFB?style=for-the-badge&logo=react&logoColor=white)
+![Material-UI](https://img.shields.io/badge/Material--UI-5.8-0081CB?style=for-the-badge&logo=mui&logoColor=white)
+![TMDB](https://img.shields.io/badge/TMDB-API-01B4E4?style=for-the-badge&logo=themoviedatabase&logoColor=white)
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## ✨ Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### 📱 Core Pages
+- **Trending** - Discover what's popular today with real-time trending content
+- **Movies** - Browse and filter an extensive movie catalog
+- **TV Series** - Explore TV shows with genre filtering
+- **Search** - Find any movie or TV show with advanced search capabilities
+- **Watchlist** - Save content to watch later (persisted locally)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### 🎨 Modern UI/UX
+- **Multiple Color Themes** - Netflix, Ocean, Purple, Forest, and Sunset themes
+- **Light/Dark/System Modes** - Automatic system preference detection
+- **Skeleton Loading** - Smooth loading animations for better UX
+- **Responsive Design** - Works beautifully on all devices
+- **Glassmorphism Effects** - Modern visual design language
 
-### `npm test`
+### 🔍 Advanced Filtering
+- **Sort Options** - By popularity, rating, or release date
+- **Year Range Filter** - Filter content by release year
+- **Rating Filter** - Set minimum rating threshold
+- **Genre Tags** - Filter by multiple genres
+- **Language Filter** - Search in specific languages
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 📋 Content Details
+- **Cast Carousel** - Browse cast members with smooth carousel
+- **Trailer Playback** - Watch trailers via YouTube integration
+- **Add to Watchlist** - Quick add/remove from watchlist
+- **Detailed Info** - Full synopsis, ratings, and metadata
 
-### `npm run build`
+---
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 🛠️ Tech Stack
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+| Technology | Purpose |
+|------------|---------|
+| **React 17** | Frontend framework |
+| **Material-UI v5** | UI component library |
+| **Axios** | HTTP client for API calls |
+| **React Router v5** | Client-side routing |
+| **TMDB API** | Movie & TV data source |
+| **React Alice Carousel** | Cast member carousel |
+| **Context API** | State management (Theme & User) |
+| **LocalStorage** | Persist watchlist & theme preferences |
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+---
 
-### `npm run eject`
+## 🚀 Getting Started
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Prerequisites
+- Node.js (v14 or higher)
+- npm or yarn
+- TMDB API Key ([Get one here](https://www.themoviedb.org/settings/api))
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Installation
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/Dinesh123527/entertainment-hub.git
+   cd entertainment-hub
+   ```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-## Learn More
+3. **Set up environment variables**
+   
+   Create a `.env` file in the root directory:
+   ```env
+   REACT_APP_API_KEY=your_tmdb_api_key_here
+   ```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+4. **Start the development server**
+   ```bash
+   npm start
+   ```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+5. **Open your browser**
+   
+   Navigate to [http://localhost:3000](http://localhost:3000)
 
-### Code Splitting
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## 📁 Project Structure
 
-### Analyzing the Bundle Size
+```
+src/
+├── components/
+│   ├── Header/          # App header with logo & theme toggle
+│   ├── MainNav/         # Bottom navigation bar
+│   ├── SingleContent/   # Content card component
+│   ├── ContentModal/    # Detailed content modal with trailer
+│   ├── Carousel/        # Cast member carousel
+│   ├── FilterSort/      # Filter & sort controls
+│   ├── AdvancedFilters/ # Advanced search filters
+│   ├── SkeletonCard/    # Loading skeleton components
+│   ├── ThemeSelector/   # Color theme picker
+│   ├── ThemeToggle/     # Light/Dark mode toggle
+│   └── Pagination/      # Page navigation
+├── Pages/
+│   ├── Trending/        # Trending content page
+│   ├── Movies/          # Movies catalog page
+│   ├── Series/          # TV series page
+│   ├── Search/          # Search page with filters
+│   └── Watchlist/       # User's saved content
+├── context/
+│   ├── ThemeContext.js  # Theme state management
+│   └── UserContext.js   # User preferences & watchlist
+├── config/
+│   └── config.js        # Image URLs and constants
+└── hooks/
+    └── useGenre.js      # Genre helper hook
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+---
 
-### Making a Progressive Web App
+## 🎨 Available Themes
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+| Theme | Primary Color | Description |
+|-------|---------------|-------------|
+| 🎬 Netflix | `#E50914` | Classic red theme |
+| 🌊 Ocean | `#00D4FF` | Cool blue tones |
+| 🍇 Purple | `#9B59B6` | Elegant purple |
+| 🌲 Forest | `#2ECC71` | Nature-inspired green |
+| 🌅 Sunset | `#FF6348` | Warm orange tones |
 
-### Advanced Configuration
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## 📜 Available Scripts
 
-### Deployment
+| Command | Description |
+|---------|-------------|
+| `npm start` | Run development server |
+| `npm run build` | Build for production |
+| `npm test` | Run test suite |
+| `npm run eject` | Eject from CRA |
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+---
 
-### `npm run build` fails to minify
+## 🤝 Contributing
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Contributions are welcome! Feel free to:
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+---
+
+## 📄 License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+---
+
+## 🙏 Credits
+
+- **TMDB** - For providing the movie and TV data API
+- **Material-UI** - For the beautiful component library
+- **React** - For making frontend development a joy
+
+---
+
+<div align="center">
+  <p>Made with ❤️ using React</p>
+  <p>⭐ Star this repo if you find it helpful!</p>
+</div>

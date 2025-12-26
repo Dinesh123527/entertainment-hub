@@ -1,7 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { React, useEffect } from "react";
-import axios from "axios";
 import { Chip } from "@material-ui/core";
+import axios from "axios";
+import { useEffect } from "react";
+
 const Genres = ({
   selectedGenres,
   setSelectedGenres,
@@ -39,14 +40,36 @@ const Genres = ({
     };
   }, []);
 
+  const chipBaseStyle = {
+    margin: "4px",
+    fontFamily: "var(--font-primary)",
+    fontWeight: 500,
+    fontSize: "12px",
+    borderRadius: "20px",
+    transition: "all 0.3s ease",
+  };
+
+  const selectedChipStyle = {
+    ...chipBaseStyle,
+    background: "linear-gradient(135deg, #e50914 0%, #ff6b6b 100%)",
+    color: "white",
+    border: "none",
+  };
+
+  const unselectedChipStyle = {
+    ...chipBaseStyle,
+    background: "var(--bg-secondary)",
+    color: "var(--text-primary)",
+    border: "1px solid var(--border-color)",
+  };
+
   return (
-    <div style={{ padding: "6px 0" }}>
+    <div className="genres-container">
       {selectedGenres.map((genre) => (
         <Chip
-          style={{ margin: 2 }}
+          style={selectedChipStyle}
           label={genre.name}
           key={genre.id}
-          color="primary"
           clickable
           size="small"
           onDelete={() => handleRemove(genre)}
@@ -54,7 +77,7 @@ const Genres = ({
       ))}
       {genres.map((genre) => (
         <Chip
-          style={{ margin: 2 }}
+          style={unselectedChipStyle}
           label={genre.name}
           key={genre.id}
           clickable
@@ -62,6 +85,33 @@ const Genres = ({
           onClick={() => handleAdd(genre)}
         />
       ))}
+      <style>{`
+        .genres-container {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 4px;
+          padding: 16px 0;
+          animation: fadeIn 0.5s ease;
+        }
+        
+        .genres-container .MuiChip-root:hover {
+          transform: translateY(-2px);
+          box-shadow: var(--shadow-sm);
+        }
+        
+        .genres-container .MuiChip-deleteIcon {
+          color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .genres-container .MuiChip-deleteIcon:hover {
+          color: white;
+        }
+        
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+      `}</style>
     </div>
   );
 };

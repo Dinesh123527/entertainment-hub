@@ -1,69 +1,61 @@
-import React, { useEffect } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import BottomNavigation from "@mui/material/BottomNavigation";
-import BottomNavigationAction from "@mui/material/BottomNavigationAction";
-import WhatshotIcon from "@mui/icons-material/Whatshot";
 import MovieIcon from "@mui/icons-material/Movie";
-import TvIcon from "@mui/icons-material/Tv";
+import PlaylistAddCheckIcon from "@mui/icons-material/PlaylistAddCheck";
 import SearchIcon from "@mui/icons-material/Search";
+import TvIcon from "@mui/icons-material/Tv";
+import WhatshotIcon from "@mui/icons-material/Whatshot";
+import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
-
-const useStyles = makeStyles({
-  root: {
-    width: "100%",
-    position: "fixed",
-    bottom: 0,
-    backgroundColor: "#2d313a",
-    ZIndex: 100,
-  },
-});
+import "./MainNav.css";
 
 export default function SimpleBottomNavigation() {
-  const classes = useStyles();
   const [value, setValue] = React.useState(0);
   const history = useHistory();
 
+
   useEffect(() => {
-    if (value === 0) {
-      history.push("/");
-    } else if (value === 1) {
-      history.push("/movies");
-    } else if (value === 2) {
-      history.push("/series");
-    } else if (value === 3) {
-      history.push("/search");
-    }
-  }, [value, history]);
+    // Set initial value based on current path
+    const path = window.location.pathname;
+    if (path === "/") setValue(0);
+    else if (path === "/movies") setValue(1);
+    else if (path === "/series") setValue(2);
+    else if (path === "/search") setValue(3);
+    else if (path === "/watchlist") setValue(4);
+  }, []);
+
+  const handleNavigation = (newValue, path) => {
+    setValue(newValue);
+    history.push(path);
+  };
+
+  const navItems = [
+    { label: "Trending", icon: <WhatshotIcon />, path: "/" },
+    { label: "Movies", icon: <MovieIcon />, path: "/movies" },
+    { label: "TV Series", icon: <TvIcon />, path: "/series" },
+    { label: "Search", icon: <SearchIcon />, path: "/search" },
+    { label: "Library", icon: <PlaylistAddCheckIcon />, path: "/watchlist" },
+  ];
 
   return (
-    <BottomNavigation
-      value={value}
-      onChange={(event, newValue) => {
-        setValue(newValue);
-      }}
-      showLabels
-      className={classes.root}
-    >
-      <BottomNavigationAction
-        style={{ color: "black" }}
-        label="Trending"
-        icon={<WhatshotIcon />}
-      />
-      <BottomNavigationAction
-        style={{ color: "black" }}
-        label="Movies"
-        icon={<MovieIcon />}
-      />
-      <BottomNavigationAction
-        style={{ color: "black" }}
-        label="TV Series"
-        icon={<TvIcon />}
-      />
-      <BottomNavigationAction
-        style={{ color: "black" }}
-        label="Search"
-        icon={<SearchIcon />}
-      />
-    </BottomNavigation>
+    <nav className="bottom-nav">
+      <div className="bottom-nav__container">
+        {navItems.map((item, index) => (
+          <button
+            key={item.label}
+            className={`bottom-nav__item ${value === index ? "active" : ""}`}
+            onClick={() => handleNavigation(index, item.path)}
+          >
+            <span className="bottom-nav__icon">{item.icon}</span>
+            <span className="bottom-nav__label">{item.label}</span>
+          </button>
+        ))}
+        <div
+          className="bottom-nav__indicator"
+          style={{
+            transform: `translateX(${value * 100}%)`,
+            width: `${100 / navItems.length}%`
+          }}
+        />
+      </div>
+    </nav>
   );
 }
