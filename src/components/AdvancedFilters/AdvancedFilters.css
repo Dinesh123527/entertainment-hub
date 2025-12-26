@@ -81,6 +81,11 @@
     border-radius: 2px;
 }
 
+.filter-label .filter-icon {
+    font-size: 16px;
+    color: var(--accent-color);
+}
+
 /* Chip Container - Horizontal Scroll */
 .chip-container {
     display: flex;

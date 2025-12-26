@@ -25,6 +25,7 @@ export default function ContentModal({ children, media_type, id }) {
   const [content, setContent] = useState();
   const [video, setVideo] = useState();
   const [dynamicColor, setDynamicColor] = useState(null);
+  const [showScreenshot, setShowScreenshot] = useState(false);
   const { toggleWatchlist, isInWatchlist, toggleFavorites, isFavorite } = useUser();
 
   const handleOpen = () => setOpen(true);
@@ -195,6 +196,15 @@ export default function ContentModal({ children, media_type, id }) {
                     >
                       {isFavorite(content.id) ? "Liked" : "Like"}
                     </Button>
+
+                    <Button
+                      variant="contained"
+                      startIcon={<CameraAltIcon />}
+                      className="modal-btn screenshot-btn"
+                      onClick={() => setShowScreenshot(true)}
+                    >
+                      Share
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -204,6 +214,15 @@ export default function ContentModal({ children, media_type, id }) {
           )}
         </Fade>
       </Modal>
+
+      {/* Screenshot Card Modal */}
+      {showScreenshot && content && (
+        <ScreenshotCard
+          content={content}
+          onClose={() => setShowScreenshot(false)}
+        />
+      )}
+
       <style>{`
         .modal-paper {
           width: 90%;

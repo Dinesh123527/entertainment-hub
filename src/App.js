@@ -8,6 +8,7 @@ import Trending from "./Pages/Trending/Trending";
 import Watchlist from "./Pages/Watchlist/Watchlist";
 import Header from "./components/Header/Header";
 import SimpleBottomNavigation from "./components/MainNav.js";
+import ParticleBackground from "./components/ParticleBackground/ParticleBackground";
 import { ThemeProvider } from "./context/ThemeContext";
 import { UserProvider } from "./context/UserContext";
 
@@ -16,6 +17,9 @@ function App() {
     <ThemeProvider>
       <UserProvider>
         <BrowserRouter>
+          {/* Animated Particle Background */}
+          <ParticleBackground />
+
           <Header />
           <div className="app">
             <Container>
