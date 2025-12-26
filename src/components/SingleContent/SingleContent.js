@@ -16,15 +16,49 @@ const SingleContent = ({
   date,
   media_type,
   vote_average,
-  overview,
-  backdrop_path,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [trailer, setTrailer] = useState(null);
   const [details, setDetails] = useState(null);
+  const [tiltStyle, setTiltStyle] = useState({});
   const hoverTimeoutRef = useRef(null);
+  const cardRef = useRef(null);
   const { toggleWatchlist, isInWatchlist } = useUser();
   const inWatchlist = isInWatchlist(id);
+
+  // 3D Parallax Tilt Effect
+  const handleMouseMove = (e) => {
+    if (!cardRef.current) return;
+
+    const card = cardRef.current;
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+
+    // Calculate rotation (max 15 degrees)
+    const rotateX = ((y - centerY) / centerY) * -12;
+    const rotateY = ((x - centerX) / centerX) * 12;
+
+    // Calculate shine position
+    const shineX = (x / rect.width) * 100;
+    const shineY = (y / rect.height) * 100;
+
+    setTiltStyle({
+      transform: `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`,
+      "--shine-x": `${shineX}%`,
+      "--shine-y": `${shineY}%`,
+    });
+  };
+
+  const handleMouseLeaveCard = () => {
+    setTiltStyle({
+      transform: "perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)",
+    });
+    clearTimeout(hoverTimeoutRef.current);
+    setIsHovered(false);
+  };
 
   // Fetch trailer and details on hover
   const fetchDetails = useCallback(async () => {
@@ -63,12 +97,7 @@ const SingleContent = ({
       if (!details) {
         fetchDetails();
       }
-    }, 400); // Delay before expanding
-  };
-
-  const handleMouseLeave = () => {
-    clearTimeout(hoverTimeoutRef.current);
-    setIsHovered(false);
+    }, 500);
   };
 
   useEffect(() => {
@@ -93,10 +122,15 @@ const SingleContent = ({
     <div
       className={`single-content ${isHovered ? "expanded" : ""}`}
       onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeaveCard}
+      ref={cardRef}
     >
       <ContentModal media_type={media_type} id={id}>
-        <div className="content-card">
+        <div className="content-card" style={tiltStyle}>
+          {/* Shine Effect Overlay */}
+          <div className="card-shine" />
+
           {/* Rating Badge */}
           <Badge
             badgeContent={vote_average?.toFixed(1)}
@@ -151,7 +185,9 @@ const SingleContent = ({
               {details?.genres && (
                 <div className="preview-genres">
                   {details.genres.slice(0, 3).map((g) => (
-                    <span key={g.id} className="genre-tag">{g.name}</span>
+                    <span key={g.id} className="genre-tag">
+                      {g.name}
+                    </span>
                   ))}
                 </div>
               )}

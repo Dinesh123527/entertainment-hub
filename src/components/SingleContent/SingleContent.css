@@ -2,7 +2,13 @@
 .single-content {
   position: relative;
   z-index: 1;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: z-index 0s 0.3s;
+  perspective: 1000px;
+}
+
+.single-content:hover {
+  z-index: 10;
+  transition: z-index 0s 0s;
 }
 
 .single-content.expanded {
@@ -20,10 +26,33 @@
   position: relative;
   font-family: var(--font-primary);
   cursor: pointer;
-  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.15s ease-out, box-shadow 0.3s ease;
   border: 1px solid var(--border-color);
   overflow: hidden;
   animation: fadeIn 0.5s ease;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* Shine Effect */
+.card-shine {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at var(--shine-x, 50%) var(--shine-y, 50%),
+      rgba(255, 255, 255, 0.15) 0%,
+      rgba(255, 255, 255, 0.05) 40%,
+      transparent 60%);
+  pointer-events: none;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.single-content:hover .card-shine {
+  opacity: 1;
 }
 
 .content-card::before {

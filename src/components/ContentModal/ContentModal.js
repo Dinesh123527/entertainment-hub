@@ -16,6 +16,7 @@ import {
   unavailableLandscape,
 } from "../../config/config";
 import { useUser } from "../../context/UserContext";
+import { applyDynamicTheme, extractDominantColor, resetDynamicTheme } from "../../utils/colorExtractor";
 import Carousel from "../Carousel/Carousel";
 import "./ContentModal.css";
 
@@ -23,15 +24,28 @@ export default function ContentModal({ children, media_type, id }) {
   const [open, setOpen] = React.useState(false);
   const [content, setContent] = useState();
   const [video, setVideo] = useState();
+  const [dynamicColor, setDynamicColor] = useState(null);
   const { toggleWatchlist, isInWatchlist, toggleFavorites, isFavorite } = useUser();
+
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+    resetDynamicTheme(); // Reset theme when modal closes
+  };
 
   const fetchData = async () => {
     const { data } = await axios.get(
       `https://api.themoviedb.org/3/${media_type}/${id}?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`
     );
     setContent(data);
+
+    // Extract color from poster
+    if (data.poster_path) {
+      const posterUrl = `${img_500}/${data.poster_path}`;
+      const color = await extractDominantColor(posterUrl);
+      setDynamicColor(color);
+      applyDynamicTheme(color);
+    }
   };
 
   const fetchVideo = async () => {
@@ -45,6 +59,17 @@ export default function ContentModal({ children, media_type, id }) {
     fetchData();
     fetchVideo();
   }, []);
+
+  // Get dynamic style based on extracted color
+  const getDynamicStyle = () => {
+    if (!dynamicColor) return {};
+    const { r, g, b } = dynamicColor;
+    return {
+      "--modal-accent": `rgb(${r}, ${g}, ${b})`,
+      "--modal-accent-glow": `0 0 40px rgba(${r}, ${g}, ${b}, 0.4)`,
+      "--modal-accent-light": `rgba(${r}, ${g}, ${b}, 0.15)`,
+    };
+  };
 
   return (
     <>
@@ -78,7 +103,10 @@ export default function ContentModal({ children, media_type, id }) {
       >
         <Fade in={open}>
           {content ? (
-            <div className="modal-paper">
+            <div className="modal-paper dynamic-theme" style={getDynamicStyle()}>
+              {/* Dynamic Color Glow Border */}
+              <div className="modal-glow-border" />
+
               <button className="modal-close" onClick={handleClose}>
                 ✕
               </button>
@@ -129,7 +157,7 @@ export default function ContentModal({ children, media_type, id }) {
                       startIcon={<YouTubeIcon />}
                       target="_blank"
                       href={`https://www.youtube.com/watch?v=${video}`}
-                      className="modal-btn trailer-btn"
+                      className="modal-btn trailer-btn dynamic-btn"
                     >
                       Watch Trailer
                     </Button>
@@ -190,6 +218,37 @@ export default function ContentModal({ children, media_type, id }) {
           padding: 20px;
           position: relative;
           animation: modalSlideUp 0.4s ease;
+          overflow: hidden;
+        }
+        
+        /* Dynamic Theme Glow Border */
+        .modal-paper.dynamic-theme {
+          border-color: var(--modal-accent, var(--accent-color));
+        }
+        
+        .modal-glow-border {
+          position: absolute;
+          top: -2px;
+          left: -2px;
+          right: -2px;
+          bottom: -2px;
+          background: linear-gradient(
+            45deg,
+            var(--modal-accent, var(--accent-color)),
+            transparent 40%,
+            transparent 60%,
+            var(--modal-accent, var(--accent-color))
+          );
+          border-radius: var(--border-radius-lg);
+          z-index: -1;
+          opacity: 0.5;
+          filter: blur(10px);
+          animation: glowPulse 3s ease-in-out infinite;
+        }
+        
+        @keyframes glowPulse {
+          0%, 100% { opacity: 0.3; }
+          50% { opacity: 0.6; }
         }
         
         .modal-close {
@@ -212,7 +271,7 @@ export default function ContentModal({ children, media_type, id }) {
         }
         
         .modal-close:hover {
-          background: var(--accent-color);
+          background: var(--modal-accent, var(--accent-color));
           color: white;
           transform: rotate(90deg);
         }
@@ -251,20 +310,25 @@ export default function ContentModal({ children, media_type, id }) {
           transition: all 0.3s ease !important;
         }
 
-        .trailer-btn {
-          background: #e50914 !important;
+        /* Dynamic Trailer Button */
+        .trailer-btn.dynamic-btn {
+          background: var(--modal-accent, #e50914) !important;
           color: white !important;
         }
         
         .trailer-btn:hover {
-          background: #ff1f1f !important;
           transform: translateY(-2px);
-          box-shadow: 0 5px 15px rgba(229, 9, 20, 0.4);
+          box-shadow: var(--modal-accent-glow, 0 5px 15px rgba(229, 9, 20, 0.4));
         }
 
         .active-btn {
           background: white !important;
           color: black !important;
+        }
+        
+        /* Dynamic scrollbar */
+        .ContentModal__description::-webkit-scrollbar-thumb {
+          background: var(--modal-accent, var(--accent-color));
         }
       `}</style>
     </>
