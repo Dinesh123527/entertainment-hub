@@ -224,8 +224,8 @@ const Search = () => {
         )}
       </div>
 
-      {/* Pagination */}
-      {numOfPages > 1 && !loading && hasSearched && content.length > 0 && (
+      {/* Pagination - hide when filtered results fit in one page */}
+      {numOfPages > 1 && !loading && hasSearched && content.length > 0 && totalResults > 20 && (
         <CustomPagination
           setPage={setPage}
           numOfPages={Math.min(numOfPages, 500)}
