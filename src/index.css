@@ -1,0 +1,284 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+@import "react-alice-carousel/lib/alice-carousel.css";
+
+/* ===== CSS Variables for Theming ===== */
+:root {
+  /* Transition for smooth theme switching */
+  --theme-transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+
+  /* Shared variables */
+  --font-primary: "Poppins", "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-display: "Montserrat", "Poppins", sans-serif;
+  --border-radius-sm: 8px;
+  --border-radius-md: 12px;
+  --border-radius-lg: 20px;
+  --border-radius-xl: 30px;
+}
+
+/* ===== Dark Mode ===== */
+[data-mode="dark"] {
+  --bg-primary: #0f0f1a;
+  --bg-secondary: #1a1a2e;
+  --bg-tertiary: #16213e;
+  --bg-card: #1e1e32;
+  --bg-header: rgba(15, 15, 26, 0.95);
+  --bg-nav: #1a1a2e;
+
+  --text-primary: #ffffff;
+  --text-secondary: #a8a8b8;
+  --text-muted: #6b6b7b;
+
+  --border-color: rgba(255, 255, 255, 0.1);
+  --border-color-hover: rgba(255, 255, 255, 0.2);
+
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.5);
+
+  --card-hover-bg: rgba(255, 255, 255, 0.08);
+  --overlay-bg: rgba(0, 0, 0, 0.8);
+
+  --scrollbar-thumb: #3a3a4a;
+  --scrollbar-track: #1a1a2e;
+}
+
+/* ===== Light Mode ===== */
+[data-mode="light"] {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --bg-tertiary: #e9ecef;
+  --bg-card: #ffffff;
+  --bg-header: rgba(255, 255, 255, 0.95);
+  --bg-nav: #f8f9fa;
+
+  --text-primary: #1a1a2e;
+  --text-secondary: #495057;
+  --text-muted: #868e96;
+
+  --border-color: rgba(0, 0, 0, 0.1);
+  --border-color-hover: rgba(0, 0, 0, 0.2);
+
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.15);
+
+  --card-hover-bg: rgba(0, 0, 0, 0.05);
+  --overlay-bg: rgba(255, 255, 255, 0.9);
+
+  --scrollbar-thumb: #ced4da;
+  --scrollbar-track: #f8f9fa;
+}
+
+/* ===== Netflix Theme (Default Red) ===== */
+[data-color-theme="netflix"] {
+  --accent-color: #e50914;
+  --accent-hover: #ff1a1a;
+  --accent-gradient: linear-gradient(135deg, #e50914 0%, #ff6b6b 100%);
+  --shadow-glow: 0 0 30px rgba(229, 9, 20, 0.3);
+}
+
+/* ===== Ocean Theme (Cyan/Teal) ===== */
+[data-color-theme="ocean"] {
+  --accent-color: #00d4ff;
+  --accent-hover: #33ddff;
+  --accent-gradient: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+  --shadow-glow: 0 0 30px rgba(0, 212, 255, 0.3);
+}
+
+/* ===== Purple Theme ===== */
+[data-color-theme="purple"] {
+  --accent-color: #9b59b6;
+  --accent-hover: #b366cc;
+  --accent-gradient: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
+  --shadow-glow: 0 0 30px rgba(155, 89, 182, 0.3);
+}
+
+/* ===== Forest Theme (Green) ===== */
+[data-color-theme="forest"] {
+  --accent-color: #2ecc71;
+  --accent-hover: #3ddb85;
+  --accent-gradient: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+  --shadow-glow: 0 0 30px rgba(46, 204, 113, 0.3);
+}
+
+/* ===== Sunset Theme (Orange) ===== */
+[data-color-theme="sunset"] {
+  --accent-color: #ff6348;
+  --accent-hover: #ff7b61;
+  --accent-gradient: linear-gradient(135deg, #ff6348 0%, #ff9f43 100%);
+  --shadow-glow: 0 0 30px rgba(255, 99, 72, 0.3);
+}
+
+/* Light mode adjustments for color themes */
+[data-mode="light"][data-color-theme="netflix"] {
+  --card-hover-bg: rgba(229, 9, 20, 0.05);
+}
+
+[data-mode="light"][data-color-theme="ocean"] {
+  --card-hover-bg: rgba(0, 212, 255, 0.05);
+}
+
+[data-mode="light"][data-color-theme="purple"] {
+  --card-hover-bg: rgba(155, 89, 182, 0.05);
+}
+
+[data-mode="light"][data-color-theme="forest"] {
+  --card-hover-bg: rgba(46, 204, 113, 0.05);
+}
+
+[data-mode="light"][data-color-theme="sunset"] {
+  --card-hover-bg: rgba(255, 99, 72, 0.05);
+}
+
+/* ===== Global Styles ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: var(--theme-transition);
+  line-height: 1.6;
+}
+
+/* Custom Scrollbar - Hidden but scrollable */
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+  display: none;
+}
+
+::-webkit-scrollbar-thumb {
+  background: transparent;
+  display: none;
+}
+
+/* For Firefox */
+* {
+  scrollbar-width: none;
+}
+
+/* Code styling */
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+/* Selection styling */
+::selection {
+  background: var(--accent-color);
+  color: white;
+}
+
+/* Link styling */
+a {
+  color: var(--accent-color);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--accent-hover);
+}
+
+/* Button base reset */
+button {
+  font-family: inherit;
+}
+
+/* Animation keyframes */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+/* Utility classes */
+.fade-in {
+  animation: fadeIn 0.5s ease forwards;
+}
+
+.slide-up {
+  animation: slideUp 0.6s ease forwards;
+}
+
+/* Loading Container */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  padding: 80px 20px;
+  min-height: 400px;
+  animation: fadeIn 0.3s ease;
+}
+
+.loading-text {
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+  font-weight: 500;
+  animation: pulse 1.5s ease-in-out infinite;
+}
