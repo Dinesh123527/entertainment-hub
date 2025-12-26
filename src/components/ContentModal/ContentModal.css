@@ -11,6 +11,9 @@
   object-fit: contain;
   border-radius: var(--border-radius-lg);
   box-shadow: var(--shadow-lg);
+  max-height: 100%;
+  width: auto;
+  height: auto;
 }
 
 .tagline {
@@ -141,7 +144,12 @@
 
   .ContentModal__portrait {
     display: flex;
-    width: 38%;
+    max-width: 38%;
+    max-height: 90%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    align-self: center;
   }
 
   .ContentModal {
