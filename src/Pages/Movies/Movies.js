@@ -25,6 +25,9 @@ const Movies = () => {
 
   const fetchMovies = async () => {
     setLoading(true);
+    const startTime = Date.now();
+    const MIN_LOADING_TIME = 800;
+
     try {
       // Build API URL with filters
       let url = `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&sort_by=${sortBy}&include_adult=false&include_video=false&page=${page}&with_genres=${genreforURL}`;
@@ -48,7 +51,14 @@ const Movies = () => {
     } catch (error) {
       console.error("Error fetching movies:", error);
     } finally {
-      setLoading(false);
+      // Ensure minimum loading time for skeleton visibility
+      const elapsed = Date.now() - startTime;
+      const remaining = MIN_LOADING_TIME - elapsed;
+      if (remaining > 0) {
+        setTimeout(() => setLoading(false), remaining);
+      } else {
+        setLoading(false);
+      }
     }
   };
 

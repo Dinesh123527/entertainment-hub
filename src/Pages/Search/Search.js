@@ -33,6 +33,8 @@ const Search = () => {
 
     setLoading(true);
     setHasSearched(true);
+    const startTime = Date.now();
+    const MIN_LOADING_TIME = 800;
 
     try {
       // Build URL with filters
@@ -72,7 +74,14 @@ const Search = () => {
       console.error("Search error:", error);
       setContent([]);
     } finally {
-      setLoading(false);
+      // Ensure minimum loading time for skeleton visibility
+      const elapsed = Date.now() - startTime;
+      const remaining = MIN_LOADING_TIME - elapsed;
+      if (remaining > 0) {
+        setTimeout(() => setLoading(false), remaining);
+      } else {
+        setLoading(false);
+      }
     }
   };
 

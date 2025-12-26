@@ -12,6 +12,9 @@ const Trending = () => {
 
   const fetchTrending = async () => {
     setLoading(true);
+    const startTime = Date.now();
+    const MIN_LOADING_TIME = 800;
+
     try {
       const { data } = await axios.get(
         `https://api.themoviedb.org/3/trending/all/day?api_key=${process.env.REACT_APP_API_KEY}&page=${page}`
@@ -20,7 +23,14 @@ const Trending = () => {
     } catch (error) {
       console.error("Error fetching trending:", error);
     } finally {
-      setLoading(false);
+      // Ensure minimum loading time for skeleton visibility
+      const elapsed = Date.now() - startTime;
+      const remaining = MIN_LOADING_TIME - elapsed;
+      if (remaining > 0) {
+        setTimeout(() => setLoading(false), remaining);
+      } else {
+        setLoading(false);
+      }
     }
   };
 
