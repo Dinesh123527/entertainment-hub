@@ -9,7 +9,7 @@ import { SkeletonGrid } from "../../components/SkeletonCard/SkeletonCard";
 import SongCard from "../../components/SongCard/SongCard";
 import "./Music.css";
 
-const SAAVN_API = "https://saavn.dev/api";
+const SAAVN_API = "https://saavn.me/api";
 
 const LANGUAGES = [
     { code: "telugu", label: "Telugu" },
