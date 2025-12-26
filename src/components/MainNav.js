@@ -1,4 +1,5 @@
 import MovieIcon from "@mui/icons-material/Movie";
+import MusicNoteIcon from "@mui/icons-material/MusicNote";
 import PlaylistAddCheckIcon from "@mui/icons-material/PlaylistAddCheck";
 import SearchIcon from "@mui/icons-material/Search";
 import TvIcon from "@mui/icons-material/Tv";
@@ -18,19 +19,16 @@ export default function SimpleBottomNavigation() {
     if (path === "/") setValue(0);
     else if (path === "/movies") setValue(1);
     else if (path === "/series") setValue(2);
-    else if (path === "/search") setValue(3);
-    else if (path === "/watchlist") setValue(4);
+    else if (path === "/music") setValue(3);
+    else if (path === "/search") setValue(4);
+    else if (path === "/watchlist") setValue(5);
   }, []);
-
-  const handleNavigation = (newValue, path) => {
-    setValue(newValue);
-    history.push(path);
-  };
 
   const navItems = [
     { label: "Trending", icon: <WhatshotIcon />, path: "/" },
     { label: "Movies", icon: <MovieIcon />, path: "/movies" },
     { label: "TV Series", icon: <TvIcon />, path: "/series" },
+    { label: "Music", icon: <MusicNoteIcon />, path: "/music" },
     { label: "Search", icon: <SearchIcon />, path: "/search" },
     { label: "Library", icon: <PlaylistAddCheckIcon />, path: "/watchlist" },
   ];
@@ -42,7 +40,10 @@ export default function SimpleBottomNavigation() {
           <button
             key={item.label}
             className={`bottom-nav__item ${value === index ? "active" : ""}`}
-            onClick={() => handleNavigation(index, item.path)}
+            onClick={() => {
+              setValue(index);
+              history.push(item.path);
+            }}
           >
             <span className="bottom-nav__icon">{item.icon}</span>
             <span className="bottom-nav__label">{item.label}</span>
