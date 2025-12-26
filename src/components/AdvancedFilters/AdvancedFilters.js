@@ -5,17 +5,19 @@ import { useState } from "react";
 import "./AdvancedFilters.css";
 
 const LANGUAGES = [
-    { code: "", label: "Any Language" },
+    { code: "", label: "All" },
     { code: "en", label: "English" },
+    { code: "hi", label: "Hindi" },
+    { code: "te", label: "Telugu" },
+    { code: "ta", label: "Tamil" },
     { code: "es", label: "Spanish" },
     { code: "fr", label: "French" },
+    { code: "ko", label: "Korean" },
+    { code: "ja", label: "Japanese" },
+    { code: "zh", label: "Chinese" },
     { code: "de", label: "German" },
     { code: "it", label: "Italian" },
     { code: "pt", label: "Portuguese" },
-    { code: "hi", label: "Hindi" },
-    { code: "ja", label: "Japanese" },
-    { code: "ko", label: "Korean" },
-    { code: "zh", label: "Chinese" },
     { code: "ru", label: "Russian" },
     { code: "ar", label: "Arabic" },
 ];
@@ -32,7 +34,8 @@ const AdvancedFilters = ({
     const [isExpanded, setIsExpanded] = useState(false);
 
     const currentYear = new Date().getFullYear();
-    const years = ["", ...Array.from({ length: 100 }, (_, i) => currentYear - i)];
+    // Show recent 10 years as chips + "All" option
+    const recentYears = ["", ...Array.from({ length: 10 }, (_, i) => currentYear - i)];
 
     const handleReset = () => {
         setYear("");
@@ -52,57 +55,53 @@ const AdvancedFilters = ({
             </button>
 
             <div className={`advanced-panel ${isExpanded ? "expanded" : ""}`}>
-                <div className="advanced-row">
-                    {/* Year Filter */}
-                    <div className="advanced-group">
-                        <label>Release Year</label>
-                        <select
-                            value={year}
-                            onChange={(e) => setYear(e.target.value)}
-                            className="advanced-select"
-                        >
-                            <option value="">Any Year</option>
-                            {years.slice(1).map((y) => (
-                                <option key={y} value={y}>
-                                    {y}
-                                </option>
-                            ))}
-                        </select>
+                {/* Year Filter - Chip Style */}
+                <div className="filter-section">
+                    <label className="filter-label">Release Year</label>
+                    <div className="chip-container">
+                        {recentYears.map((y) => (
+                            <button
+                                key={y || "all"}
+                                className={`filter-chip ${year === y ? "active" : ""}`}
+                                onClick={() => setYear(y)}
+                            >
+                                {y || "All Years"}
+                            </button>
+                        ))}
                     </div>
+                </div>
 
-                    {/* Rating Filter */}
-                    <div className="advanced-group">
-                        <label>Min Rating: {minRating > 0 ? `${minRating}+` : "Any"}</label>
-                        <input
-                            type="range"
-                            min="0"
-                            max="9"
-                            step="1"
-                            value={minRating}
-                            onChange={(e) => setMinRating(Number(e.target.value))}
-                            className="advanced-slider"
-                        />
-                        <div className="slider-labels">
-                            <span>0</span>
-                            <span>5</span>
-                            <span>9+</span>
-                        </div>
+                {/* Rating Filter */}
+                <div className="filter-section">
+                    <label className="filter-label">
+                        Min Rating: {minRating > 0 ? `${minRating}+` : "Any"}
+                    </label>
+                    <div className="rating-chips">
+                        {[0, 5, 6, 7, 8, 9].map((rating) => (
+                            <button
+                                key={rating}
+                                className={`rating-chip ${minRating === rating ? "active" : ""}`}
+                                onClick={() => setMinRating(rating)}
+                            >
+                                {rating === 0 ? "Any" : `${rating}+`}
+                            </button>
+                        ))}
                     </div>
+                </div>
 
-                    {/* Language Filter */}
-                    <div className="advanced-group">
-                        <label>Language</label>
-                        <select
-                            value={language}
-                            onChange={(e) => setLanguage(e.target.value)}
-                            className="advanced-select"
-                        >
-                            {LANGUAGES.map((lang) => (
-                                <option key={lang.code} value={lang.code}>
-                                    {lang.label}
-                                </option>
-                            ))}
-                        </select>
+                {/* Language Filter - Chip Style */}
+                <div className="filter-section">
+                    <label className="filter-label">Language</label>
+                    <div className="chip-container">
+                        {LANGUAGES.map((lang) => (
+                            <button
+                                key={lang.code || "all"}
+                                className={`filter-chip ${language === lang.code ? "active" : ""}`}
+                                onClick={() => setLanguage(lang.code)}
+                            >
+                                {lang.label}
+                            </button>
+                        ))}
                     </div>
                 </div>
 

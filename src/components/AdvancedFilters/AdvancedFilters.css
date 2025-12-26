@@ -45,140 +45,126 @@
 }
 
 .advanced-panel.expanded {
-    max-height: 350px;
-    padding: 20px;
+    max-height: 600px;
+    padding: 24px;
     margin-top: 12px;
     border: 1px solid var(--border-color);
     opacity: 1;
 }
 
-/* Row Layout */
-.advanced-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
+/* Filter Section */
+.filter-section {
+    margin-bottom: 20px;
 }
 
-/* Group */
-.advanced-group {
+.filter-section:last-of-type {
+    margin-bottom: 0;
+}
+
+.filter-label {
     display: flex;
-    flex-direction: column;
+    align-items: center;
     gap: 8px;
-    min-width: 160px;
-    flex: 1;
-}
-
-.advanced-group label {
     font-size: 11px;
     font-weight: 700;
     color: var(--text-secondary);
     text-transform: uppercase;
     letter-spacing: 1px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
+    margin-bottom: 12px;
 }
 
-.advanced-group label::before {
+.filter-label::before {
     content: "";
     width: 3px;
-    height: 12px;
+    height: 14px;
     background: var(--accent-gradient);
     border-radius: 2px;
 }
 
-/* Premium Select Dropdown */
-.advanced-select {
-    padding: 12px 16px;
-    padding-right: 40px;
-    background: linear-gradient(135deg, var(--bg-card) 0%, rgba(var(--accent-color-rgb), 0.05) 100%);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-lg);
-    color: var(--text-primary);
-    font-family: var(--font-primary);
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='none' viewBox='0 0 24 24'%3E%3Cpath stroke='%23888' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 12px center;
-    background-size: 16px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    position: relative;
-}
-
-.advanced-select:hover {
-    border-color: var(--accent-color);
-    background: linear-gradient(135deg, var(--bg-card) 0%, rgba(var(--accent-color-rgb), 0.1) 100%);
-    box-shadow: 0 4px 16px rgba(var(--accent-color-rgb), 0.15);
-    transform: translateY(-1px);
-}
-
-.advanced-select:focus {
-    border-color: var(--accent-color);
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(var(--accent-color-rgb), 0.2), 0 4px 16px rgba(0, 0, 0, 0.15);
-}
-
-.advanced-select option {
-    background: var(--bg-secondary);
-    color: var(--text-primary);
-    padding: 12px;
-    font-weight: 500;
-}
-
-.advanced-select option:hover,
-.advanced-select option:checked {
-    background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-color-secondary, var(--accent-color)) 100%);
-    color: white;
-}
-
-/* Slider */
-.advanced-slider {
-    width: 100%;
-    height: 5px;
-    border-radius: 3px;
-    background: var(--bg-tertiary);
-    appearance: none;
-    cursor: pointer;
-}
-
-.advanced-slider::-webkit-slider-thumb {
-    appearance: none;
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    background: var(--accent-gradient);
-    cursor: pointer;
-    transition: transform 0.2s ease;
-}
-
-.advanced-slider::-webkit-slider-thumb:hover {
-    transform: scale(1.15);
-}
-
-.slider-labels {
+/* Chip Container - Horizontal Scroll */
+.chip-container {
     display: flex;
-    justify-content: space-between;
-    font-size: 10px;
-    color: var(--text-muted);
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 4px 0;
+}
+
+/* Filter Chip - Modern Pill Style */
+.filter-chip {
+    padding: 8px 16px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 50px;
+    color: var(--text-secondary);
+    font-family: var(--font-primary);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap;
+}
+
+.filter-chip:hover {
+    border-color: var(--accent-color);
+    color: var(--text-primary);
+    background: rgba(var(--accent-color-rgb), 0.08);
+    transform: translateY(-2px);
+}
+
+.filter-chip.active {
+    background: var(--accent-gradient);
+    border-color: transparent;
+    color: white;
+    box-shadow: 0 4px 15px rgba(var(--accent-color-rgb), 0.35);
+    transform: translateY(-2px);
+}
+
+/* Rating Chips */
+.rating-chips {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.rating-chip {
+    padding: 10px 18px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    color: var(--text-secondary);
+    font-family: var(--font-primary);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    min-width: 50px;
+    text-align: center;
+}
+
+.rating-chip:hover {
+    border-color: var(--accent-color);
+    color: var(--text-primary);
+    background: rgba(var(--accent-color-rgb), 0.08);
+}
+
+.rating-chip.active {
+    background: var(--accent-gradient);
+    border-color: transparent;
+    color: white;
+    box-shadow: 0 4px 15px rgba(var(--accent-color-rgb), 0.35);
 }
 
 /* Actions */
 .advanced-actions {
     display: flex;
     gap: 10px;
-    margin-top: 16px;
-    padding-top: 14px;
+    margin-top: 20px;
+    padding-top: 16px;
     border-top: 1px solid var(--border-color);
 }
 
 .advanced-apply-btn {
-    padding: 10px 20px;
+    padding: 12px 24px;
     background: var(--accent-gradient);
     border: none;
     border-radius: var(--border-radius-md);
@@ -196,7 +182,7 @@
 }
 
 .advanced-reset-btn {
-    padding: 10px 20px;
+    padding: 12px 24px;
     background: transparent;
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius-md);
@@ -211,18 +197,36 @@
 .advanced-reset-btn:hover {
     background: var(--bg-tertiary);
     color: var(--text-primary);
+    border-color: var(--text-secondary);
 }
 
 /* Responsive */
 @media (max-width: 600px) {
-    .advanced-row {
-        flex-direction: column;
-        gap: 14px;
+    .chip-container {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding-bottom: 8px;
+        margin: 0 -10px;
+        padding-left: 10px;
+        padding-right: 10px;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
     }
 
-    .advanced-group {
-        width: 100%;
-        min-width: unset;
+    .chip-container::-webkit-scrollbar {
+        display: none;
+    }
+
+    .rating-chips {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding-bottom: 8px;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    .rating-chips::-webkit-scrollbar {
+        display: none;
     }
 
     .advanced-actions {
